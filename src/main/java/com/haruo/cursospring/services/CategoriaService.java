@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.haruo.cursospring.domain.Categoria;
 import com.haruo.cursospring.repositories.CategoriaRepository;
+import com.haruo.cursospring.services.exceptions.ObjectNotFoundException;
 /**
  * Serviço que oferece consulta do tipo categoria
  * @author haruo
@@ -25,6 +26,9 @@ public class CategoriaService {
 	public Categoria buscar(Integer id) {
 		Optional<Categoria> categoria = repository.findById(id); // O Objeto retorna o tipo optional do tipo que precisar.
 		
-		return categoria.orElse(null); // Se encontrado retorna o objeto, se não retorna nulo.
+		return categoria.orElseThrow( () -> new ObjectNotFoundException (
+					"Objeto não encontrado! id: " + id + ", Tipo: " + Categoria.class.getName()
+				)); // Se encontrado retorna o objeto, se não retorna a mensagem
+		
 	}
 }
